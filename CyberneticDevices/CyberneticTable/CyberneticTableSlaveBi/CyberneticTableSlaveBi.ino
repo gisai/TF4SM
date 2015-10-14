@@ -32,9 +32,9 @@ char bufferBT_read;
 
 //Código inicial que se ejecuta al pulsar RESET
 void setup() {
-	// conexión hacia el maestro
+  // conexión hacia el maestro
    mySerialMAIN.begin(19200);
-   // conexión desde el maestro
+   // conexión desde el motor de ejecución
    Serial.begin(19200);
    
    //inicializamos el lector NFC
