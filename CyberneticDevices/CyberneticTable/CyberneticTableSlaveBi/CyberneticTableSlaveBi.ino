@@ -58,7 +58,7 @@ void loop() {
    
    //Si hay una lectura ...
    if (!ID.equals(STRING_NULL)) {
-	   // Encendemos el LED
+	   	// Encendemos el LED
 		digitalWrite(PIN_LED, HIGH);  
 		//Solicitamos permiso para transmitir hacia 
 		//el Arduino gestor y esperamos respuesta
@@ -70,13 +70,13 @@ void loop() {
 		// Bajamos el PIN de solicitar permiso
 		digitalWrite(PIN_SOLICITATION, LOW);
 		// Como el RDM 8800 solo garantiza la corrección en la primera
-	  // lectura, el resto se descartan
-	  rdm8800.esperaCambio ();
+	  	// lectura, el resto se descartan
+	  	rdm8800.esperaCambio ();
 		// Objeto retirado, LED apagado
-	  digitalWrite(PIN_LED, LOW);
-	  // Repetimos el proceso de escritura para avisar
-	   // de la retirada del objeto
-	   digitalWrite(PIN_SOLICITATION, HIGH);
+	  	digitalWrite(PIN_LED, LOW);
+	  	// Repetimos el proceso de escritura para avisar
+	   	// de la retirada del objeto
+	   	digitalWrite(PIN_SOLICITATION, HIGH);
 		while (!digitalRead(PIN_PERMISSION)) {} 
 		mySerialMAIN.println  ("BALDA D");
 		digitalWrite(PIN_SOLICITATION, LOW);
@@ -88,11 +88,11 @@ void loop() {
     bufferBT_read = Serial.read();     
 	switch (bufferBT_read) {
 		case '1':			
-            digitalWrite(PIN_S0, HIGH);
+            		digitalWrite(PIN_S0, HIGH);
 			digitalWrite(PIN_S1, LOW);
 			break;
 		case '2':
-      digitalWrite(PIN_S0, LOW);
+      			digitalWrite(PIN_S0, LOW);
 			digitalWrite(PIN_S1, HIGH);			
 			delay(10000);
 			digitalWrite(PIN_S0, HIGH);
