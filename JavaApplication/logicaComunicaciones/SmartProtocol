@@ -1,0 +1,123 @@
+
+package logicaComunicaciones;
+
+import main.BaseDatos;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Clase que extrae la información del mensaje
+ * que llega desde los cybernetic devices
+ * 
+ * @author Borja Bordel
+ * @date Mayo 2015
+ */
+public class SmartProtocol {
+          
+    // Lista de listeners que quieren ser informados
+    // de la llegada de un nuevo mensaje
+    private ArrayList listeners;
+    
+    /**
+     * Constructor
+     */
+    public SmartProtocol () {
+       listeners = new ArrayList ();
+    }
+    
+    /**
+     * Añade un listener a la lista de escuchantes que quieren recibir
+     * notificaciones de eventos
+     * 
+     * @param listener Listener que quiere recibir notificaciones de los eventos 
+     */
+    public void addProtocolEventListener (ProtocolEventListener listener) {
+        listeners.add(listener);
+    }
+    
+    /**
+     * Método para interpretar la sintaxis del mensaje enviado
+     * y generar el evento correspondiente
+     * 
+     * @param evento Evento que anuncia el objeto inteligente
+     */
+    public void procesaEvento (String evento) {
+        String [] args = evento.split(" ");
+        boolean valido = true;
+        int numObjeto = 0;
+        char zona = ' ';
+        
+        // Expresiones regulares para los mensajes reconocidos 
+        //por el protocolo
+        Pattern mensaje1= Pattern.compile("^BALDA [A,B,C,D] [A-F0-9]{12}$");
+        Pattern mensaje2 = Pattern.compile("^BALDA [A,B,C,D]$");
+        Pattern mensaje3 = Pattern.compile("^GUANTE [A-F0-9]{12}$");
+        Pattern mensaje4 = Pattern.compile("^GUANTE$");
+        
+        Matcher mat1 = mensaje1.matcher(evento);
+        Matcher mat2 = mensaje2.matcher(evento);
+        Matcher mat3 = mensaje3.matcher(evento);
+        Matcher mat4 = mensaje4.matcher(evento);
+        
+        if (mat1.matches()) {             
+            zona = args[1].charAt(0);
+            numObjeto = BaseDatos.getNombreObjeto(Long.parseLong(args[2].trim(),16));            
+        } else {
+            if (mat2.matches()) {
+                zona = args[1].charAt(0);
+            } else {
+                if (mat3.matches()) {
+                    zona = 'G';
+                    numObjeto = BaseDatos.getNombreObjeto(Long.parseLong(args[1].trim(),16));
+                } else {
+                    if (mat4.matches()) {
+                        zona = 'G';
+                    } else {
+                       valido = false; 
+                    }
+                }                
+            }
+        }
+        
+        ProtocolEventObject protocolEvObj = new ProtocolEventObject (this, zona, numObjeto, evento, valido);
+        ListIterator li = listeners.listIterator();
+        // Recorremos la lista para ejecutar el metodo NombreCambiado de cada manejador almacenado
+        while (li.hasNext()) {
+            // Convertimos (CAST) de nuestro objeto
+            ProtocolEventListener listener = (ProtocolEventListener)li.next(); 
+            // Ejecutamos el metodo manejador del evento con los parametros necesarios
+            listener.cambiaEstado(protocolEvObj);
+        }
+    }
+    
+    /**
+     * Método para generar el mensaje que se debe transmitir hacia la bandeja 
+     * cuando se desea activar una comuicación
+     * 
+     * @param num Numero de mensaje que se desea transmitir
+     * @return String con el mensaje de protocolo 
+     * correspondiente a la información que se desea transmitir
+     */    
+    public String getMensaje (int num) {
+        String mensaje;
+        switch (num) {
+            case 1:
+                mensaje = "1";
+                break;
+            case 2:
+                mensaje = "2";
+                break;
+            case 3:
+                mensaje = "3";
+                break;
+            case 4:
+                mensaje = "4";
+                break;
+            default:
+                mensaje = "";
+        }
+        return mensaje;
+    }
+}
