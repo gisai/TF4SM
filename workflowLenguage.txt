@@ -1,0 +1,11 @@
+El lenguaje de definción de workflows se compone de sólo 4 posibles sentencias:
+
+BALDA <ZONA> <Nombre_objeto>    Se emplea para indicar que se espera la colocación del objeto "<Nombre_objeto>" en la zona "<ZONA>"
+BALDA <ZONA>    Se emplea para indicar que se espera la retirada del objeto colocado en la zona "<ZONA>"
+GUANTE <Nombre_objeto>    Se emplea para indicar que se espera que el guante coja el objeto "<Nombre_objeto>"
+GUANTE    Se emplea para indicar que se espera que el guante suelte el objeto que sostuviera
+
+Nótese que la aplicación no revisa la coherencia del workflow descrito 
+(es decir, por ejemplo, no se revisa que primero se indique que algo se debe colocar en una zona, 
+antes de pedir la retirada del objeto).
+
