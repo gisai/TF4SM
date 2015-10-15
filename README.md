@@ -1,5 +1,6 @@
 # TF4SM
 Implementación del Traceability Framework For Small Manufacturing (TF4SM).
+Release 3.1
 
 El proyecto cuenta con dos grandes partes diferenciadas: varios archivos Arduino para su ejecución en las plataformas cibernéticas del sistema (guante y mesa cibernéticos); y una aplicación Java para la monitorización del sistema y creación y verificación de workflows.
 
